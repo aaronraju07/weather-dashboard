@@ -16,7 +16,10 @@
 
       <h2>🌤 Weather</h2>
 
-      <input type="text" id="cityInput" placeholder="Search city...">
+      <div class="search-box">
+        <input type="text" id="cityInput" placeholder="Search city..." oninput="getSuggestions()">
+        <div id="suggestions" class="suggestions-box"></div>
+      </div>
       <button onclick="getWeather()">Search</button>
       <button onclick="getLocationWeather()">📍 Use My Location</button>
       <button onclick="saveCity()">⭐ Save City</button>

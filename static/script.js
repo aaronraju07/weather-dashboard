@@ -181,22 +181,75 @@ function saveCity() {
     loadSavedCities(); // 🔥 refresh list
   }
 }
-
 function loadSavedCities() {
   const cities = JSON.parse(localStorage.getItem("cities")) || [];
   const div = document.getElementById("savedCities");
 
+  if (cities.length === 0) {
+    div.innerHTML = "<h3>Saved Cities</h3><p>No saved cities</p>";
+    return;
+  }
+
   div.innerHTML = "<h3>Saved Cities</h3>";
 
   cities.forEach(city => {
-    div.innerHTML += `<p onclick="getWeatherFromSaved('${city}')">${city}</p>`;
+    div.innerHTML += `
+      <div class="saved-item">
+        <span onclick="getWeatherFromSaved('${city}')">${city}</span>
+        <button onclick="event.stopPropagation(); deleteCity('${city}')">❌</button>
+      </div>
+    `;
   });
 }
 
-function getWeatherFromSaved(city) {
-  document.getElementById("cityInput").value = city;
-  getWeather();
+function deleteCity(cityToDelete) {
+  if (!confirm("Delete this city?")) return;
+
+  let cities = JSON.parse(localStorage.getItem("cities")) || [];
+
+  cities = cities.filter(city => city !== cityToDelete);
+
+  localStorage.setItem("cities", JSON.stringify(cities));
+
+  loadSavedCities();
 }
 
+function getWeatherFromSaved(city) {
+  document.getElementById("cityInput").value = city;  // ✅ show in input
+  getWeather();                                       // ✅ fetch data
+}
+
+async function getSuggestions() {
+  const query = document.getElementById("cityInput").value;
+
+  if (query.length < 2) {
+    document.getElementById("suggestions").innerHTML = "";
+    return;
+  }
+
+  try {
+    const res = await fetch(`/get-suggestions?q=${query}`);
+    const data = await res.json();
+
+    const box = document.getElementById("suggestions");
+    box.innerHTML = "";
+
+    data.forEach(city => {
+      const item = document.createElement("div");
+      item.innerText = `${city.name}, ${city.country}`;
+
+      item.onclick = () => {
+        document.getElementById("cityInput").value = city.name;
+        box.innerHTML = "";
+        getWeather();
+      };
+
+      box.appendChild(item);
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 window.onload = loadSavedCities;

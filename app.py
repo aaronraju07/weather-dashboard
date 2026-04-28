@@ -44,6 +44,16 @@ def get_forecast():
         return jsonify({"cod": 500, "message": "Error fetching forecast"})
 
 
+@app.route("/get-suggestions")
+def get_suggestions():
+    query = request.args.get("q")
+
+    url = f"http://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid={API_KEY}"
+
+    res = requests.get(url)
+    return jsonify(res.json())
+
+
 @app.route("/get-weather-coords")
 def get_weather_coords():
     lat = request.args.get("lat")
