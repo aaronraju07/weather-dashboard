@@ -54,6 +54,16 @@ def get_suggestions():
     return jsonify(res.json())
 
 
+@app.route("/get-air")
+def get_air():
+    lat = request.args.get("lat")
+    lon = request.args.get("lon")
+
+    url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={API_KEY}"
+    res = requests.get(url)
+    return jsonify(res.json())
+
+
 @app.route("/get-weather-coords")
 def get_weather_coords():
     lat = request.args.get("lat")

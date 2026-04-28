@@ -128,7 +128,20 @@ async function getForecast(city) {
         }
       }
     });
+    const hourlyDiv = document.getElementById("hourly");
+    hourlyDiv.innerHTML = "";
 
+    data.list.slice(0, 8).forEach(item => {
+      const time = item.dt_txt.split(" ")[1].slice(0, 5);
+
+      hourlyDiv.innerHTML += `
+    <div class="forecast-card">
+      <p>${time}</p>
+      <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}.png">
+      <p>${item.main.temp.toFixed(1)}°C</p>
+    </div>
+  `;
+    });
   } catch (err) {
     console.error(err);
   }
@@ -146,6 +159,13 @@ function updateUI(data) {
 
   document.getElementById("icon").src =
     `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+
+
+  const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+  const sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString();
+
+  document.getElementById("sunrise").innerText = sunrise;
+  document.getElementById("sunset").innerText = sunset;
 }
 
 function getLocationWeather() {
@@ -251,5 +271,8 @@ async function getSuggestions() {
     console.error(err);
   }
 }
+
+
+
 
 window.onload = loadSavedCities;
