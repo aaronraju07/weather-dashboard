@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+
+      <h2>🌤 Weather</h2>
+
+      <input type="text" id="cityInput" placeholder="Search city...">
+      <button onclick="getWeather()">Search</button>
+      <button onclick="getLocationWeather()">📍 Use My Location</button>
+      <button onclick="saveCity()">⭐ Save City</button>
+
+      <div id="savedCities"></div>
+
+      <div class="main-weather">
+        <h1 id="temp">--°C</h1>
+        <img id="icon">
+        <h3 id="city">City</h3>
+        <p id="desc">Description</p>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+      <h2>Today's Highlights</h2>
+
+      <div class="cards">
+        <div class="card">💧 Humidity: <span id="humidity">--</span>%</div>
+        <div class="card">🌬 Wind: <span id="wind">--</span> km/h</div>
+        <div class="card">🌡 Feels Like: <span id="feels">--</span>°C</div>
+        <div class="card">📊 Pressure: <span id="pressure">--</span> hPa</div>
+      </div>
+
+      <h2>5-Day Forecast</h2>
+      <div id="forecast" class="forecast-container"></div>
+
+      <h2>Temperature Trend</h2>
+      <canvas id="weatherChart"></canvas>
+
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
